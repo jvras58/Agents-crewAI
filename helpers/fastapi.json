@@ -1,0 +1,97 @@
+{
+  "title": "FastAPI Reference",
+  "description": "Resumo e exemplos práticos para construir APIs com FastAPI — endpoints, dependências, exemplos de uso, deploy, melhores práticas e troubleshooting.",
+  "sections": [
+    {
+      "id": "overview",
+      "title": "Visão geral",
+      "content": "FastAPI é um framework moderno, rápido (alta performance) para construir APIs com Python 3.7+ baseado em ASGI. Usa Pydantic para validação de dados e tipagem, e Starlette como servidor async.",
+      "keywords": ["fastapi", "starlette", "pydantic", "asgi", "api"]
+    },
+    {
+      "id": "installation",
+      "title": "Instalação",
+      "content": "Instale com pip: `pip install fastapi uvicorn[standard]`. Para ambientes de produção, considere instalar extras e ferramentas de performance.",
+      "snippets": {
+        "pip": "pip install fastapi uvicorn[standard]",
+        "poetry": "poetry add fastapi uvicorn[standard]"
+      }
+    },
+    {
+      "id": "quick_start",
+      "title": "Quick start",
+      "content": "Exemplo mínimo de aplicação FastAPI e como rodar com uvicorn.",
+      "snippets": {
+        "app_py": "from fastapi import FastAPI\n\napp = FastAPI()\n\n@app.get(\"/\")\nasync def read_root():\n    return {\"message\": \"Hello World\"}\n",
+        "run": "uvicorn app:app --reload --host 0.0.0.0 --port 8000"
+      }
+    },
+    {
+      "id": "paths_and_parameters",
+      "title": "Paths, Query e Path Parameters",
+      "content": "Defina parâmetros de rota, query parameters e validação com tipos do Python e Pydantic. Exemplo de parâmetros obrigatórios e opcionais.",
+      "snippets": {
+        "path_query": "@app.get(\"/items/{item_id}\")\nasync def read_item(item_id: int, q: str | None = None):\n    return {\"item_id\": item_id, \"q\": q}\n"
+      }
+    },
+    {
+      "id": "pydantic_models",
+      "title": "Modelos Pydantic",
+      "content": "Use modelos Pydantic para validar e serializar dados de entrada/saída. Declare tipos, validators e exemplos (schema_extra).",
+      "snippets": {
+        "model": "from pydantic import BaseModel\n\nclass Item(BaseModel):\n    name: str\n    description: str | None = None\n    price: float\n    tax: float | None = None\n"
+      }
+    },
+    {
+      "id": "dependency_injection",
+      "title": "Dependências",
+      "content": "FastAPI tem um sistema de dependências inspirado em frameworks modernos. Utilize `Depends` para compartilhar lógica (DB sessions, auth, etc.).",
+      "snippets": {
+        "depends": "from fastapi import Depends\n\nasync def get_db():\n    db = SessionLocal()\n    try:\n        yield db\n    finally:\n        db.close()\n\n@app.get(\"/users/\")\nasync def list_users(db = Depends(get_db)):\n    return db.query(User).all()"
+      }
+    },
+    {
+      "id": "background_tasks",
+      "title": "Background Tasks",
+      "content": "Use BackgroundTasks para executar tarefas assíncronas leves após a resposta, ou utilize workers mais robustos como Celery/RQ para jobs pesados.",
+      "snippets": {
+        "background": "from fastapi import BackgroundTasks\n\nasync def notify(email: str):\n    # enviar email\n    pass\n\n@app.post(\"/send/\")\nasync def send_email(background_tasks: BackgroundTasks, email: str):\n    background_tasks.add_task(notify, email)\n    return {\"status\": \"enqueued\"}" 
+      }
+    },
+    {
+      "id": "deployment",
+      "title": "Deploy",
+      "content": "Para produção, rode com um servidor ASGI (Uvicorn/Gunicorn+Uvicorn workers) e configure processos, logs e health checks. Exemplo de comando com Gunicorn:\n`gunicorn -k uvicorn.workers.UvicornWorker -w 4 app:app`.",
+      "snippets": {
+        "uvicorn": "uvicorn app:app --host 0.0.0.0 --port 8000 --workers 4",
+        "gunicorn": "gunicorn -k uvicorn.workers.UvicornWorker -w 4 app:app"
+      }
+    },
+    {
+      "id": "best_practices",
+      "title": "Melhores práticas",
+      "content": "Valide modelos, use tipagem, escreva testes, faça logging estruturado, configure timeouts e limites de requisição, use CORS corretamente e limite a superfície de ataque com autenticação/autorização.",
+      "items": ["Use Pydantic para validação", "Escreva testes para endpoints", "Isolar dependências (DB, cache) usando Depends", "Usar monitoring e logging"]
+    },
+    {
+      "id": "troubleshooting",
+      "title": "Troubleshooting",
+      "content": "Erros comuns: problemas de import circular, uso incorreto de async/await, pydantic validation errors, configuração incorreta de uvicorn/gunicorn.",
+      "tips": ["Verifique logs do Uvicorn", "Teste endpoints localmente com curl or httpie", "Use fastapi.TestClient para testes unitários"]
+    },
+    {
+      "id": "useful_links",
+      "title": "Links úteis",
+      "links": [
+        {"label": "FastAPI docs", "url": "https://fastapi.tiangolo.com/"},
+        {"label": "Pydantic", "url": "https://pydantic-docs.helpmanual.io/"},
+        {"label": "Uvicorn", "url": "https://www.uvicorn.org/"}
+      ]
+    }
+  ],
+  "metadata": {
+    "author": "generated",
+    "version": "1.0",
+    "generated_at": "2025-10-17"
+  }
+}
