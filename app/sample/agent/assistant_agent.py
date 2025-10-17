@@ -1,6 +1,7 @@
 """
 Definição do Agente Assistente.
 Responsável por gerar a resposta final com base no contexto.
+# https://docs.crewai.com/en/guides/agents/crafting-effective-agents
 """
 from crewai import LLM, Agent
 
