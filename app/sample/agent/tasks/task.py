@@ -1,5 +1,6 @@
 """
 Configuração das tarefas e Crew para o agente sample.
+# https://docs.crewai.com/en/guides/agents/crafting-effective-agents
 """
 
 from crewai import Crew, Task
