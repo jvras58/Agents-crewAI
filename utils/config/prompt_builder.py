@@ -3,13 +3,13 @@
 import os
 from typing import Optional
 
-from utils.config.load_yaml import load_agent_prompt
+from utils.config.load_yaml import load_prompt
 
 
-def build_agent_prompt(prompt_path: str) -> dict:
-    """Constrói o prompt completo do agente a partir de um arquivo YAML,
+def build_prompt(prompt_path: str) -> dict:
+    """Constrói o prompt completo a partir de um arquivo YAML,
     integrando exemplos no backstory se presentes."""
-    prompt = load_agent_prompt(prompt_path)
+    prompt = load_prompt(prompt_path)
 
     backstory_base = prompt.get('backstory', '')
     examples = prompt.get('examples', [])
@@ -23,12 +23,10 @@ def build_agent_prompt(prompt_path: str) -> dict:
     return prompt
 
 
-def build_agent_prompt_by_name(
-    agent_name: str, base_path: Optional[str] = None
-) -> dict:
-    """Constrói o prompt do agente pelo nome, assumindo o arquivo YAML está em {base_path}/{agent_name}_prompt.yaml.
+def build_prompt_by_name(agent_name: str, base_path: Optional[str] = None) -> dict:
+    """Constrói o prompt pelo nome, assumindo o arquivo YAML está em {base_path}/{agent_name}_prompt.yaml.
     Se base_path não for fornecido, usa utils/prompts/."""
     if base_path is None:
         base_path = os.path.join(os.path.dirname(__file__), '..', 'prompts')
     prompt_path = os.path.join(base_path, f'{agent_name}_prompt.yaml')
-    return build_agent_prompt(prompt_path)
+    return build_prompt(prompt_path)

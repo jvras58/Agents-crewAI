@@ -1,11 +1,12 @@
 """
 Definição do Agente Assistente.
 Responsável por gerar a resposta final com base no contexto.
-# https://docs.crewai.com/en/guides/agents/crafting-effective-agents
+# https://docs.crewai.com/pt-BR/guides/agents/crafting-effective-agents
+# https://docs.crewai.com/pt-BR/concepts/agents
 """
 from crewai import LLM, Agent
 
-from utils.config.prompt_builder import build_agent_prompt_by_name
+from utils.config.prompt_builder import build_prompt_by_name
 from utils.settings import get_settings
 
 
@@ -16,7 +17,7 @@ def get_assistant_agent(llm: LLM) -> Agent:
     Args:
         llm: A instância da LLM a ser usada.
     """
-    prompt = build_agent_prompt_by_name("assistant_agent", "app/sample/agent/prompt")
+    prompt = build_prompt_by_name("assistant_agent", "app/sample/agent/prompt")
 
     return Agent(
         role=prompt["role"],
