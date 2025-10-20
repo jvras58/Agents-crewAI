@@ -1,0 +1,3 @@
+role: researcher
+description: "Pesquise e recupere contexto relevante para a consulta: {query}."
+expected_output: "Contexto detalhado e completo recuperado das fontes indexadas (RAG tool)."

@@ -7,6 +7,7 @@ from crewai import Crew, Task
 from sample.agent.assistant_agent import get_assistant_agent
 from sample.agent.researcher_agent import get_researcher_agent
 
+from utils.config.prompt_builder import build_prompt_by_name
 from utils.llm import get_llm
 from utils.rag_config import setup_rag_tool_json
 from utils.settings import get_settings
@@ -21,17 +22,22 @@ def setup_sample_crew() -> Crew:
     researcher = get_researcher_agent(llm=llm, rag_tool=rag_tool_json)
     assistant = get_assistant_agent(llm=llm)
 
+    prompt1 = build_prompt_by_name("sample_task_1", "app/sample/agent/prompt")
+    prompt2 = build_prompt_by_name("sample_task_2", "app/sample/agent/prompt")
+
     task1 = Task(
-        description="Pesquise e recupere contexto relevante para a consulta: {query}.",
+        role=prompt1["role"],
+        description=prompt1["description"],
         agent=researcher,
-        expected_output="Contexto detalhado e completo recuperado das fontes indexadas (RAG tool)."
+        expected_output=prompt1["expected_output"],
     )
 
     task2 = Task(
-        description="Usando SOMENTE o contexto fornecido pelo Pesquisador, crie uma resposta final clara e profissional para a consulta: {query}.",
+        role=prompt2["role"],
+        description=prompt2["description"],
         agent=assistant,
         context=[task1],
-        expected_output="Resposta final formatada profissionalmente, baseada 100% no contexto recuperado."
+        expected_output=prompt2["expected_output"],
     )
 
     return Crew(

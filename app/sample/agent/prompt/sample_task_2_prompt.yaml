@@ -1,0 +1,3 @@
+role: assistant
+description: "Usando SOMENTE o contexto fornecido pelo Pesquisador, crie uma resposta final clara e profissional para a consulta: {query}."
+expected_output: "Resposta final formatada profissionalmente, baseada 100% no contexto recuperado."
